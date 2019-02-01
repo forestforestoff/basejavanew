@@ -18,7 +18,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     private String uuid;
     private String fullName;
     private final Map<SectionType, AbstractSection> sectionMap = new EnumMap<>(SectionType.class);
-    private final Map<ContactType, Contact> contactMap = new EnumMap<>(ContactType.class);
+    private final Map<ContactType, String> contactMap = new EnumMap<>(ContactType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -38,7 +38,7 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sectionMap;
     }
 
-    public Map<ContactType, Contact> getContactMap() {
+    public Map<ContactType, String> getContactMap() {
         return contactMap;
     }
 
@@ -47,7 +47,7 @@ public class Resume implements Comparable<Resume>, Serializable {
         sectionMap.put(type, section);
     }
 
-    public void addContact(ContactType type, Contact contact) {
+    public void addContact(ContactType type, String contact) {
         contactMap.put(type, contact);
     }
 
@@ -64,8 +64,8 @@ public class Resume implements Comparable<Resume>, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName) &&
+        return uuid.equals(resume.uuid) &&
+                fullName.equals(resume.fullName) &&
                 Objects.equals(sectionMap, resume.sectionMap) &&
                 Objects.equals(contactMap, resume.contactMap);
     }
@@ -77,7 +77,12 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public String toString() {
-        return uuid + " " + fullName;
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", sectionMap=" + sectionMap +
+                ", contactMap=" + contactMap +
+                '}';
     }
 
     @Override

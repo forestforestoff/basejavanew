@@ -16,9 +16,7 @@ public class DataStreamSerializer implements StorageStrategy {
             dos.writeUTF(r.getFullName());
             writeCollection(dos, r.getContactMap().entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue().getContactLink().getTitle());
-                dos.writeUTF(entry.getValue().getContactLink().getUrl());
-                dos.writeUTF(entry.getValue().getContact());
+                dos.writeUTF(entry.getValue());
             });
             writeCollection(dos, r.getSectionMap().entrySet(), entry -> {
                 SectionType sectionType = entry.getKey();
@@ -58,7 +56,7 @@ public class DataStreamSerializer implements StorageStrategy {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readElement(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), new Contact(new Link(dis.readUTF(), dis.readUTF()), dis.readUTF())));
+            readElement(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
             readElement(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {

@@ -1,8 +1,10 @@
 package ru.javaops.webapp;
 
 import ru.javaops.webapp.model.AbstractSection;
-import ru.javaops.webapp.model.Contact;
 import ru.javaops.webapp.model.Resume;
+
+import static ru.javaops.webapp.model.ContactType.E_MAIL;
+import static ru.javaops.webapp.model.ContactType.SKYPE;
 
 public class ResumeTestData {
 
@@ -11,18 +13,14 @@ public class ResumeTestData {
         for (AbstractSection section : testResume.getSectionMap().values()) {
             System.out.println(section + "\n");
         }
-        for (Contact contact : testResume.getContactMap().values()) {
-            System.out.println(contact + "\n");
-        }
+
     }
 
     public static Resume getInstance(String uuid, String fullName) {
 
-        /*Link e_mailLink = new Link("E-mail", "mailto:gkislin@yandex.ru");
-        Link skypeLink = new Link("Skype", null);
-        Contact skype = new Contact(skypeLink, "grigory.kislin");
-        Contact e_mail = new Contact(e_mailLink, "gkislin@yandex.ru");
-        ExperienceList.Experience experience_1 = new ExperienceList.Experience(LocalDate.of(2012, 4, 1), LocalDate.of(2014, 10, 1), "Java архитектор. " +
+        Resume resume = new Resume(uuid, fullName);
+
+        /*ExperienceList.Experience experience_1 = new ExperienceList.Experience(LocalDate.of(2012, 4, 1), LocalDate.of(2014, 10, 1), "Java архитектор. " +
                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO.");
         ExperienceList experienceList_1 = new ExperienceList("RIT Center", null, experience_1);
         ExperienceList.Experience experience_2_1 = new ExperienceList.Experience(LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1), "Инженер (программист Fortran, C)");
@@ -42,11 +40,11 @@ public class ResumeTestData {
         resume.addSection(EXPERIENCE, experienceSection);
         resume.addSection(ACHIEVEMENT, listSection);
         resume.addSection(OBJECTIVE, textSection_1);
-        resume.addSection(PERSONAL, textSection_2);
+        resume.addSection(PERSONAL, textSection_2);*/
 
-        resume.addContact(SKYPE, skype);
-        resume.addContact(E_MAIL, e_mail);*/
+        resume.addContact(SKYPE, "skype");
+        resume.addContact(E_MAIL, "e_mail");
 
-        return new Resume(uuid, fullName);
+        return resume;
     }
 }
