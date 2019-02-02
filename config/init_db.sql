@@ -9,7 +9,7 @@ CREATE TABLE contact
   id          SERIAL,
   resume_uuid CHAR(36) NOT NULL REFERENCES resume (uuid) ON DELETE CASCADE,
   type        TEXT     NOT NULL,
-  value       TEXT     NOT NULL
+  contact     TEXT     NOT NULL
 );
 CREATE UNIQUE INDEX contact_uuid_type_index
   ON contact (resume_uuid, type);
