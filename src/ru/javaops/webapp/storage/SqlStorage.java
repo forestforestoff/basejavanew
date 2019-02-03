@@ -6,10 +6,8 @@ import ru.javaops.webapp.model.Resume;
 import ru.javaops.webapp.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 public class SqlStorage implements Storage {
 
@@ -53,12 +51,12 @@ public class SqlStorage implements Storage {
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
-                executeHelper(r, ps, 2, 1);
+                setParams(r, ps);
                 if (ps.executeUpdate() != 1) {
                     throw new NotExistStorageException(r.getUuid());
                 }
             }
-            deleteContact(r.getUuid(), "contact", "resume_uuid");
+            deleteContact(r);
             insertContact(conn, r);
             return null;
         });
@@ -67,8 +65,8 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-                    try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
-                        executeHelper(r, ps, 1, 2);
+                    try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (full_name, uuid) VALUES (?,?)")) {
+                        setParams(r, ps);
                         ps.execute();
                     }
                     insertContact(conn, r);
@@ -79,7 +77,13 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        deleteContact(uuid, "resume", "uuid");
+        sqlHelper.sqlHelp("DELETE FROM resume WHERE uuid=?", ps -> {
+            ps.setString(1, uuid);
+            if (ps.executeUpdate() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
+            return null;
+        });
     }
 
     @Override
@@ -89,22 +93,19 @@ public class SqlStorage implements Storage {
                         "       LEFT JOIN contact c ON r.uuid = c.resume_uuid " +
                         "        ORDER BY full_name, uuid ", ps -> {
                     ResultSet rs = ps.executeQuery();
-                    Map<String, Resume> map = new HashMap<>();
+                    Map<String, Resume> map = new LinkedHashMap<>();
                     while (rs.next()) {
                         String uuid = rs.getString("uuid");
                         Resume resume;
-                        if (map.containsKey(uuid)) {
-                            resume = map.get(uuid);
-                        } else {
-                            resume = new Resume(uuid, rs.getString("full_name"));
-                            map.put(uuid, resume);
-                        }
+                        map.putIfAbsent(uuid, new Resume(uuid, rs.getString("full_name")));
+                        resume = map.get(uuid);
                         String contact = rs.getString("contact");
                         if (contact != null) {
                             resume.addContact(ContactType.valueOf(rs.getString("type")),
                                     contact);
                         }
                     }
+                    System.out.println(map.values());
                     return new ArrayList<>(map.values());
                 });
     }
@@ -117,9 +118,9 @@ public class SqlStorage implements Storage {
         });
     }
 
-    private void executeHelper(Resume r, PreparedStatement ps, int... order) throws SQLException {
-        ps.setString(order[0], r.getUuid());
-        ps.setString(order[1], r.getFullName());
+    private void setParams(Resume r, PreparedStatement ps) throws SQLException {
+        ps.setString(1, r.getFullName());
+        ps.setString(2, r.getUuid());
     }
 
     private void insertContact(Connection conn, Resume r) throws SQLException {
@@ -134,12 +135,10 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteContact(String uuid, String from, String where) {
-        sqlHelper.sqlHelp("DELETE  FROM " + from + " WHERE " + where + " = ?", ps -> {
-            ps.setString(1, uuid);
-            if (ps.executeUpdate() == 0) {
-                throw new NotExistStorageException(uuid);
-            }
+    private void deleteContact(Resume r) {
+        sqlHelper.sqlHelp("DELETE  FROM contact WHERE resume_uuid=?", ps -> {
+            ps.setString(1, r.getUuid());
+            ps.execute();
             return null;
         });
     }
