@@ -56,7 +56,7 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(r.getUuid());
                 }
             }
-            deleteContact(r);
+            deleteContact(conn, r);
             insertContact(conn, r);
             return null;
         });
@@ -96,8 +96,9 @@ public class SqlStorage implements Storage {
                     Map<String, Resume> map = new LinkedHashMap<>();
                     while (rs.next()) {
                         String uuid = rs.getString("uuid");
+                        String full_name = rs.getString("full_name");
                         Resume resume;
-                        map.putIfAbsent(uuid, new Resume(uuid, rs.getString("full_name")));
+                        map.computeIfAbsent(uuid, s -> new Resume(s, full_name));
                         resume = map.get(uuid);
                         String contact = rs.getString("contact");
                         if (contact != null) {
@@ -105,7 +106,6 @@ public class SqlStorage implements Storage {
                                     contact);
                         }
                     }
-                    System.out.println(map.values());
                     return new ArrayList<>(map.values());
                 });
     }
@@ -135,11 +135,10 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteContact(Resume r) {
-        sqlHelper.sqlHelp("DELETE  FROM contact WHERE resume_uuid=?", ps -> {
+    private void deleteContact(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE  FROM contact WHERE resume_uuid=?")) {
             ps.setString(1, r.getUuid());
             ps.execute();
-            return null;
-        });
+        }
     }
 }
