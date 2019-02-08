@@ -29,11 +29,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String getSection() {
-        StringBuilder text = new StringBuilder();
-        for (String list : getList()) {
-            text.append(list).append("\n");
-        }
-        return text.toString();
+        return String.join("\n", getList());
     }
 
     @Override

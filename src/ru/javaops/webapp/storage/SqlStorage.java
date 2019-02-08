@@ -183,13 +183,16 @@ public class SqlStorage implements Storage {
 
     private void setSections(ResultSet rs, Resume r) throws SQLException {
         String section = rs.getString("section");
-        if (section != null) {
-            if (section.contains("\n")) {
-                ListSection listSection = new ListSection(Arrays.asList(section.split("\n")));
-                r.addSection(SectionType.valueOf(rs.getString("type")), listSection);
-            } else {
-                r.addSection(SectionType.valueOf(rs.getString("type")), new TextSection(section));
-            }
+        SectionType sectionType = SectionType.valueOf(rs.getString("type"));
+        switch (sectionType) {
+            case OBJECTIVE:
+            case PERSONAL:
+                r.addSection(sectionType, new TextSection(section));
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                r.addSection(sectionType, new ListSection(Arrays.asList(section.split("\n"))));
+                break;
         }
     }
 
