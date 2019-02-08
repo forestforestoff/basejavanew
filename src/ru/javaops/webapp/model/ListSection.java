@@ -1,8 +1,10 @@
 package ru.javaops.webapp.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ListSection extends AbstractSection {
 
@@ -23,6 +25,15 @@ public class ListSection extends AbstractSection {
 
     public List<String> getList() {
         return list;
+    }
+
+    @Override
+    public String getSection() {
+        StringBuilder text = new StringBuilder();
+        for (String list : getList()) {
+            text.append(list).append("\n");
+        }
+        return text.toString();
     }
 
     @Override

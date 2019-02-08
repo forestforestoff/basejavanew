@@ -1,10 +1,15 @@
 package ru.javaops.webapp;
 
 import ru.javaops.webapp.model.AbstractSection;
+import ru.javaops.webapp.model.ListSection;
 import ru.javaops.webapp.model.Resume;
+import ru.javaops.webapp.model.TextSection;
+
+import java.util.ArrayList;
 
 import static ru.javaops.webapp.model.ContactType.E_MAIL;
 import static ru.javaops.webapp.model.ContactType.SKYPE;
+import static ru.javaops.webapp.model.SectionType.*;
 
 public class ResumeTestData {
 
@@ -29,7 +34,7 @@ public class ResumeTestData {
         List<ExperienceList> experienceLists = new ArrayList<>();
         experienceLists.add(experienceList_1);
         experienceLists.add(experienceList_2);
-        ExperienceSection experienceSection = new ExperienceSection(experienceLists);
+        ExperienceSection experienceSection = new ExperienceSection(experienceLists); */
         TextSection textSection_1 = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         TextSection textSection_2 = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
         ArrayList<String> list = new ArrayList<>();
@@ -37,10 +42,9 @@ public class ResumeTestData {
         list.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike.");
         ListSection listSection = new ListSection(list);
 
-        resume.addSection(EXPERIENCE, experienceSection);
         resume.addSection(ACHIEVEMENT, listSection);
         resume.addSection(OBJECTIVE, textSection_1);
-        resume.addSection(PERSONAL, textSection_2);*/
+        resume.addSection(PERSONAL, textSection_2);
 
         resume.addContact(SKYPE, "skype");
         resume.addContact(E_MAIL, "e_mail");

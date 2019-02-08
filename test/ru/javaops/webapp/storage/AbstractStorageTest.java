@@ -5,10 +5,10 @@ import org.junit.Test;
 import ru.javaops.webapp.ResumeTestData;
 import ru.javaops.webapp.exception.ExistStorageException;
 import ru.javaops.webapp.exception.NotExistStorageException;
-import ru.javaops.webapp.model.ContactType;
-import ru.javaops.webapp.model.Resume;
+import ru.javaops.webapp.model.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,6 +66,11 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume newResume = new Resume(UUID_1, "name");
         newResume.addContact(ContactType.PHONE, "+7-999-999-99-99");
+        newResume.addSection(SectionType.PERSONAL, new TextSection("Красавчик"));
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Стажер");
+        list.add("Монтажер");
+        newResume.addSection(SectionType.ACHIEVEMENT, new ListSection(list));
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }

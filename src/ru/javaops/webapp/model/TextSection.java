@@ -20,6 +20,11 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
+    public String getSection() {
+        return getText();
+    }
+
+    @Override
     public String toString() {
         return "TextSection{" +
                 "text='" + text + '\'' +
