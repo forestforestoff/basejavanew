@@ -1,6 +1,8 @@
 package ru.javaops.webapp.model;
 
 
+import sun.swing.SwingUtilities2;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -57,6 +59,18 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public String getContact(ContactType contactType) {
+        return contactMap.get(contactType);
+    }
+
+    public AbstractSection getSection(SectionType sectionType) {
+        return sectionMap.get(sectionType);
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override
