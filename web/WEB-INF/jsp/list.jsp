@@ -29,6 +29,7 @@
         </c:forEach>
     </table>
 </section>
+<hr>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

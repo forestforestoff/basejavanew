@@ -1,7 +1,6 @@
 package ru.javaops.webapp.web;
 
-import ru.javaops.webapp.model.ContactType;
-import ru.javaops.webapp.model.Resume;
+import ru.javaops.webapp.model.*;
 import ru.javaops.webapp.storage.SqlStorage;
 import ru.javaops.webapp.storage.Storage;
 
@@ -26,6 +25,23 @@ public class ResumeServlet extends HttpServlet {
                 r.addContact(type, value);
             } else {
                 r.getContactMap().remove(type);
+            }
+        }
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        r.addSection(type, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        r.addSection(type, new ListSection(value.split("\\n")));
+                        break;
+                }
+            } else {
+                r.getSectionMap().remove(type);
             }
         }
         storage.update(r);
