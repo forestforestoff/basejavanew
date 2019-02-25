@@ -53,9 +53,9 @@ public class ResumeServlet extends HttpServlet {
                             String name = values[i];
                             if (!ServletUtil.isEmpty(name)) {
                                 List<ExperienceList.Experience> experiences = new ArrayList<>();
-                                String[] startDates = request.getParameterValues("startDate");
-                                String[] endDates = request.getParameterValues("endDate");
-                                String[] descriptions = request.getParameterValues("description");
+                                String[] startDates = request.getParameterValues(type.name() + i + "startDate");
+                                String[] endDates = request.getParameterValues(type.name() + i +"endDate");
+                                String[] descriptions = request.getParameterValues(type.name() + i + "description");
                                 for (int j = 0; j < descriptions.length; j++) {
                                     if (!ServletUtil.isEmpty(descriptions[j])) {
                                         experiences.add(new ExperienceList.Experience(LocalDate.parse(startDates[j]), LocalDate.parse(endDates[j]), descriptions[j]));

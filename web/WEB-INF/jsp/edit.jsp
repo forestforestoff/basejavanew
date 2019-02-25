@@ -43,9 +43,9 @@
                     <textarea name='${type}' cols=60 rows=6><%=section.getSection()%></textarea>
                 </c:when>
                 <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
-                    <c:forEach var="expli" items="<%=((ExperienceSection) section).getExperienceList()%>">
+                    <c:forEach var="expli" items="<%=((ExperienceSection) section).getExperienceList()%>" varStatus="counter">
                         <p><p style="font-size:20px"><b>Название учереждения:</b><br>
-                            <input type="text" name='${type}place' size=73 value="${expli.link.title}">
+                            <input type="text" name='${type}' size=73 value="${expli.link.title}">
                         </p>
                         <p><b>Сайт учереждения:</b><br>
                             <input type="text" name='${type}url' size=73 value="${expli.link.url}">
@@ -53,14 +53,14 @@
                         <c:forEach var="exp" items="${expli.experience}">
                             <jsp:useBean id="exp" type="ru.javaops.webapp.model.ExperienceList.Experience"/>
                             <p><b>Начальная дата:</b>
-                                <input type="text" name="${type}startDate" size=6
+                                <input type="text" name="${type}${counter.index}startDate" size=6
                                        value="<%=exp.getStartDate()%>">&emsp;
                                 <b>Конечная дата:</b>
-                                <input type="text" name="${type}endDate" size=6
+                                <input type="text" name="${type}${counter.index}endDate" size=6
                                        value="<%=exp.getEndDate()%>">
                             </p>
                             <p><b>Описание:</b><br>
-                                <textarea name="${type}description" rows=5
+                                <textarea name="${type}${counter.index}description" rows=5
                                           cols=75>${exp.description}</textarea>
                             </p>
                         </c:forEach>
