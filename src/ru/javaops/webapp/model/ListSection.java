@@ -1,13 +1,12 @@
 package ru.javaops.webapp.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ListSection extends AbstractSection {
 
+    public static final ListSection EMPTY = new ListSection("");
     private static final long serialVersionUID = 1L;
     private List<String> list;
 

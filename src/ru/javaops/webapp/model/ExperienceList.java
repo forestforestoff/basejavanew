@@ -15,6 +15,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExperienceList implements Serializable {
 
+    public static final ExperienceList EMPTY = new ExperienceList("", "", Experience.EMPTY);
     private static final long serialVersionUID = 1L;
     private Link link;
     private List<Experience> experienceList;
@@ -66,6 +67,7 @@ public class ExperienceList implements Serializable {
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Experience implements Serializable {
 
+        public static final Experience EMPTY = new Experience();
         private static final long serialVersionUID = 1L;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;

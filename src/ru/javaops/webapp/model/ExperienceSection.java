@@ -2,6 +2,7 @@ package ru.javaops.webapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +11,10 @@ public class ExperienceSection extends AbstractSection {
 
     private static final long serialVersionUID = 1L;
     private List<ExperienceList> experienceList;
+
+    public ExperienceSection(ExperienceList... experienceLists) {
+        this(Arrays.asList(experienceLists));
+    }
 
     public ExperienceSection(List<ExperienceList> experienceList) {
         Objects.requireNonNull(experienceList, "experienceList must not be null");
