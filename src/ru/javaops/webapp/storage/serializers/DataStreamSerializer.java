@@ -36,7 +36,7 @@ public class DataStreamSerializer implements StorageStrategy {
                         writeCollection(dos, ((ExperienceSection) abstractSection).getExperienceList(), elem -> {
                             dos.writeUTF(elem.getLink().getTitle());
                             dos.writeUTF(elem.getLink().getUrl());
-                            writeCollection(dos, elem.getExperienceList(), exp -> {
+                            writeCollection(dos, elem.getExperience(), exp -> {
                                 writeLocalDate(dos, exp.getStartDate());
                                 writeLocalDate(dos, exp.getEndDate());
                                 dos.writeUTF(exp.getDescription());

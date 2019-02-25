@@ -1,5 +1,6 @@
 <%@ page import="ru.javaops.webapp.model.ContactType" %>
 <%@ page import="ru.javaops.webapp.model.TextSection" %>
+<%@ page import="ru.javaops.webapp.model.ExperienceSection" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -36,10 +37,35 @@
             <h2><a>${type.title}</a></h2>
             <c:choose>
                 <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
-                    <textarea name='${type}' cols=60 rows=3><%=((TextSection)section).getText()%></textarea>
+                    <textarea name='${type}' cols=60 rows=3><%=((TextSection) section).getText()%></textarea>
                 </c:when>
                 <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
                     <textarea name='${type}' cols=60 rows=6><%=section.getSection()%></textarea>
+                </c:when>
+                <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
+                    <c:forEach var="expli" items="<%=((ExperienceSection) section).getExperienceList()%>">
+                        <p><p style="font-size:20px"><b>Название учереждения:</b><br>
+                            <input type="text" name='${type}place' size=73 value="${expli.link.title}">
+                        </p>
+                        <p><b>Сайт учереждения:</b><br>
+                            <input type="text" name='${type}url' size=73 value="${expli.link.url}">
+                        </p>
+                        <c:forEach var="exp" items="${expli.experience}">
+                            <jsp:useBean id="exp" type="ru.javaops.webapp.model.ExperienceList.Experience"/>
+                            <p><b>Начальная дата:</b>
+                                <input type="text" name="${type}startDate" size=6
+                                       value="<%=exp.getStartDate()%>">&emsp;
+                                <b>Конечная дата:</b>
+                                <input type="text" name="${type}endDate" size=6
+                                       value="<%=exp.getEndDate()%>">
+                            </p>
+                            <p><b>Описание:</b><br>
+                                <textarea name="${type}description" rows=5
+                                          cols=75>${exp.description}</textarea>
+                            </p>
+                        </c:forEach>
+                        <hr width="550" align="left">
+                    </c:forEach>
                 </c:when>
             </c:choose>
         </c:forEach>

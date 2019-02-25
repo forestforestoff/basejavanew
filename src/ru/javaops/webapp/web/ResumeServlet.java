@@ -3,11 +3,15 @@ package ru.javaops.webapp.web;
 import ru.javaops.webapp.model.*;
 import ru.javaops.webapp.storage.SqlStorage;
 import ru.javaops.webapp.storage.Storage;
+import ru.javaops.webapp.util.ServletUtil;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -21,7 +25,7 @@ public class ResumeServlet extends HttpServlet {
         r.setFullName(fullName);
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            if (!ServletUtil.isEmpty(value)) {
                 r.addContact(type, value);
             } else {
                 r.getContactMap().remove(type);
@@ -29,7 +33,10 @@ public class ResumeServlet extends HttpServlet {
         }
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            String[] values = request.getParameterValues(type.name());
+            if (ServletUtil.isEmpty(value)) {
+                r.getSectionMap().remove(type);
+            } else {
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
@@ -39,9 +46,28 @@ public class ResumeServlet extends HttpServlet {
                     case QUALIFICATIONS:
                         r.addSection(type, new ListSection(value.split("\\n")));
                         break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        List<ExperienceList> exps = new ArrayList<>();
+                        for (int i = 0; i < values.length; i++) {
+                            String name = values[i];
+                            if (!ServletUtil.isEmpty(name)) {
+                                List<ExperienceList.Experience> experiences = new ArrayList<>();
+                                String[] startDates = request.getParameterValues("startDate");
+                                String[] endDates = request.getParameterValues("endDate");
+                                String[] descriptions = request.getParameterValues("description");
+                                for (int j = 0; j < descriptions.length; j++) {
+                                    if (!ServletUtil.isEmpty(descriptions[j])) {
+                                        experiences.add(new ExperienceList.Experience(LocalDate.parse(startDates[j]), LocalDate.parse(endDates[j]), descriptions[j]));
+                                    }
+                                }
+                                String[] urls = request.getParameterValues(type.name() + "url");
+                                exps.add(new ExperienceList(new Link(name, urls[i]), experiences));
+                            }
+                        }
+                        r.addSection(type, new ExperienceSection(exps));
+                        break;
                 }
-            } else {
-                r.getSectionMap().remove(type);
             }
         }
         storage.update(r);

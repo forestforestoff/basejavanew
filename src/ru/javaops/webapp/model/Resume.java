@@ -1,8 +1,5 @@
 package ru.javaops.webapp.model;
 
-
-import sun.swing.SwingUtilities2;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,7 +40,6 @@ public class Resume implements Comparable<Resume>, Serializable {
     public Map<ContactType, String> getContactMap() {
         return contactMap;
     }
-
 
     public void addSection(SectionType type, AbstractSection section) {
         sectionMap.put(type, section);

@@ -37,15 +37,15 @@ public class ExperienceList implements Serializable {
         return link;
     }
 
-    public List<Experience> getExperienceList() {
+    public List<Experience> getExperience() {
         return experienceList;
     }
 
     @Override
     public String toString() {
-        return "\n" + "ExperienceList{" +
-                "link=" + link + "\n" +
-                "experienceList=" + experienceList +
+        return "ExperienceList{" +
+                "link=" + link +
+                ", experienceList=" + experienceList +
                 '}';
     }
 
