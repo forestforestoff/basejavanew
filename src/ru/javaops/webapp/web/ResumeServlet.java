@@ -1,5 +1,6 @@
 package ru.javaops.webapp.web;
 
+import ru.javaops.webapp.Config;
 import ru.javaops.webapp.model.*;
 import ru.javaops.webapp.storage.SqlStorage;
 import ru.javaops.webapp.storage.Storage;
@@ -15,7 +16,8 @@ import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
 
-    private Storage storage = new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "postgres");
+    private Storage storage = Config.get().getStorage();
+            //new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "postgres");
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
